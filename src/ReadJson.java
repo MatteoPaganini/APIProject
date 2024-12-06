@@ -22,11 +22,11 @@ public class ReadJson {
         JSONObject file = new JSONObject();
         file.put("Full Name", "Ritu Sharma");
         file.put("Roll No.", 1704310046);
-        file.put("Tution Fees", 65400);
+        file.put("Tuition Fees", 65400);
 
 
         // To print in JSON format.
-        System.out.print(file.get("Tution Fees"));
+        System.out.print(file.get("Tuition Fees"));
         ReadJson readingIsWhat = new ReadJson();
 
     }
@@ -44,10 +44,14 @@ public class ReadJson {
         String totlaJson="";
         try {
 
-            URL url = new URL("https://swapi.dev/api/people/4/");
+            URL url = new URL("https://shazam-api6.p.rapidapi.com/shazam/top_tracks_country?country_code=UZ&limit=10");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+            //conn.setRequestProperty("Accept", "application/json");
+
+            conn.setRequestProperty("x-rapidapi-host", "shazam-api6.p.rapidapi.com");
+            conn.setRequestProperty("x-rapidapi-key", "38668c27cemshdc8714e89254ec4p19d5d2jsn3c04734edc82");
+
 
             if (conn.getResponseCode() != 200) {
 
