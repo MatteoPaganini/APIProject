@@ -13,7 +13,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-// Program for print data in JSON format.
+// ShazamAPI --> top tracks in the Country
+//
+
 public class ReadJson {
     public static void main(String args[]) throws ParseException {
         // In java JSONObject is used to create JSON object
@@ -44,7 +46,9 @@ public class ReadJson {
         String totlaJson="";
         try {
 
-            URL url = new URL("https://shazam-api6.p.rapidapi.com/shazam/top_tracks_country?country_code=UZ&limit=10");
+            URL url = new URL("https://shazam-api6.p.rapidapi.com/shazam/top_tracks_country?country_code=US&limit=10");
+            //link curled to Java using curlconverter.com
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             //conn.setRequestProperty("Accept", "application/json");
@@ -85,17 +89,32 @@ public class ReadJson {
 
         try {
 
-            String name = (String)jsonObject.get("name");
+            JSONObject result = (JSONObject) jsonObject.get("result"); //getting inside of the result Object
+            System.out.println(result);
 
-            org.json.simple.JSONArray msg = (org.json.simple.JSONArray) jsonObject.get("films");
-            int n =   msg.size(); //(msg).length();
+            org.json.simple.JSONArray data = (org.json.simple.JSONArray) result.get("data"); //grabs the whole data array
+            System.out.println(data);
+
+            int n =   data.size(); //(msg).length();
             for (int i = 0; i < n; ++i) {
-                String test =(String) msg.get(i);
+                JSONObject test =(JSONObject) data.get(i);
                 System.out.println(test);
-                // System.out.println(person.getInt("key"));
+                //grabs one of the songs from data array
+
+                JSONObject attributes = (JSONObject) test.get("attributes");
+                System.out.println(attributes);
+
+
+                String name = (String) attributes.get("name");
+                System.out.println(name);
+                //grabs String from attributes
+
+
+
             }
-            String height= (String)jsonObject.get("height");
-            System.out.println(name);
+
+            //String height= (String)jsonObject.get("height");
+
         }
 
         catch (Exception e) {
