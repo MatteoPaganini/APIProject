@@ -1,22 +1,26 @@
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-
-// video to load jar
-//https://www.youtube.com/watch?v=QAJ09o3Xl_0
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import javax.swing.*;
+
+
 
 // ShazamAPI --> top tracks in the Country
-//
 
 public class ReadJson {
+
+    private JFrame mainFrame;
+    private JPanel controlPanel;
+
     public static void main(String args[]) throws ParseException {
         // In java JSONObject is used to create JSON object
         // which is a subclass of java.util.HashMap.
@@ -27,9 +31,12 @@ public class ReadJson {
         file.put("Tuition Fees", 65400);
 
 
+
+
         // To print in JSON format.
         System.out.print(file.get("Tuition Fees"));
-        ReadJson readingIsWhat = new ReadJson();
+        ReadJson app = new ReadJson();
+        app.setupGL();
 
     }
 
@@ -40,6 +47,21 @@ public class ReadJson {
             System.out.println(e);
         }
     }
+
+    //figure out how to implement a layout when
+    public void setupGL (){
+        mainFrame = new JFrame("API Project Layout");
+        mainFrame.setSize(800, 800);
+        mainFrame.setLayout(new GridLayout(3, 3));
+
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout(0, 2)); //setting controlPanel as a BorderLayout
+        JScrollPane scrollPane = new JScrollPane(controlPanel); // adding scrollPane
+
+        mainFrame.add(scrollPane, BorderLayout.CENTER);
+    }
+
+
 
     public  void pull() throws ParseException {
         String output = "abc";
@@ -89,25 +111,29 @@ public class ReadJson {
 
         try {
 
-            JSONObject result = (JSONObject) jsonObject.get("result"); //getting inside of the result Object
-            System.out.println(result);
+            JSONObject result = (JSONObject) jsonObject.get("result"); //getting inside the result Object
+            //System.out.println(result);
 
             org.json.simple.JSONArray data = (org.json.simple.JSONArray) result.get("data"); //grabs the whole data array
-            System.out.println(data);
+            //System.out.println(data);
 
             int n =   data.size(); //(msg).length();
             for (int i = 0; i < n; ++i) {
                 JSONObject test =(JSONObject) data.get(i);
-                System.out.println(test);
+                //System.out.println(test);
                 //grabs one of the songs from data array
+                System.out.println(i+1);
 
                 JSONObject attributes = (JSONObject) test.get("attributes");
-                System.out.println(attributes);
+                //System.out.println(attributes);
 
 
                 String name = (String) attributes.get("name");
                 System.out.println(name);
                 //grabs String from attributes
+
+                String artistName = (String) attributes.get("artistName");
+                System.out.println(artistName);
 
 
 
