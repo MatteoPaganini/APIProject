@@ -21,6 +21,14 @@ public class ReadJson {
     private JFrame mainFrame;
     private JPanel controlPanel;
 
+    private JTextArea textArea1;
+    private JTextArea textArea2;
+    private JTextArea textArea3;
+    private JTextArea textArea4;
+    private JTextArea textArea5;
+    private JTextArea textArea6;
+    private JScrollPane scrollPane;
+
     public static void main(String args[]) throws ParseException {
         // In java JSONObject is used to create JSON object
         // which is a subclass of java.util.HashMap.
@@ -36,11 +44,12 @@ public class ReadJson {
         // To print in JSON format.
         System.out.print(file.get("Tuition Fees"));
         ReadJson app = new ReadJson();
-        app.setupGL();
+        //app.setupLayout();
 
     }
 
     public ReadJson(){
+        setupLayout();
         try {
             pull();
         }catch(Exception e){
@@ -49,16 +58,42 @@ public class ReadJson {
     }
 
     //figure out how to implement a layout when
-    public void setupGL (){
-        mainFrame = new JFrame("API Project Layout");
-        mainFrame.setSize(800, 800);
+    public void setupLayout (){
+        mainFrame = new JFrame("Shazam API Project Layout");
+        mainFrame.setSize(900, 900);
         mainFrame.setLayout(new GridLayout(3, 3));
 
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new BorderLayout(0, 2)); //setting controlPanel as a BorderLayout
-        JScrollPane scrollPane = new JScrollPane(controlPanel); // adding scrollPane
+        textArea1 = new JTextArea("Most Popular Songs in the US:" + "\n");
+        textArea2 = new JTextArea("TA2");
+        textArea3 = new JTextArea("TA3");
+        textArea4 = new JTextArea("TA4");
+        textArea5 = new JTextArea("TA5");
+        textArea6 = new JTextArea("TA6");
+        scrollPane = new JScrollPane(textArea1);
 
-        mainFrame.add(scrollPane, BorderLayout.CENTER);
+        //JButton
+
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
+
+        //mainFrame.add(textArea1);
+        mainFrame.add(scrollPane);
+        mainFrame.add(textArea2);
+        mainFrame.add(textArea3);
+        mainFrame.add(textArea4);
+        mainFrame.add(textArea5);
+        mainFrame.add(textArea6);
+        //controlPanel.add(JButton);
+
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout(2, 2)); //setting controlPanel as a BorderLayout
+       // JScrollPane scrollPane = new JScrollPane(controlPanel); // adding scrollPane
+
+        mainFrame.setVisible(true);
     }
 
 
@@ -66,6 +101,7 @@ public class ReadJson {
     public  void pull() throws ParseException {
         String output = "abc";
         String totlaJson="";
+
         try {
 
             URL url = new URL("https://shazam-api6.p.rapidapi.com/shazam/top_tracks_country?country_code=US&limit=10");
@@ -123,23 +159,22 @@ public class ReadJson {
                 //System.out.println(test);
                 //grabs one of the songs from data array
                 System.out.println(i+1);
+                textArea1.append((String.valueOf(i+1)) + "\n");
 
                 JSONObject attributes = (JSONObject) test.get("attributes");
                 //System.out.println(attributes);
 
-
                 String name = (String) attributes.get("name");
                 System.out.println(name);
+                textArea1.append(name + "\n");
                 //grabs String from attributes
 
                 String artistName = (String) attributes.get("artistName");
                 System.out.println(artistName);
-
-
+                textArea1.append(artistName + "\n" + "\n");
 
             }
 
-            //String height= (String)jsonObject.get("height");
 
         }
 
