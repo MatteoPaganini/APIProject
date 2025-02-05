@@ -30,6 +30,7 @@ public class ReadJson {
     private JScrollPane scrollPane1;
     private JScrollPane scrollPane2;
     private JScrollPane scrollPane3;
+    private JScrollPane scrollPane4;
 
 
     public static void main(String args[]) throws ParseException {
@@ -51,7 +52,7 @@ public class ReadJson {
     public ReadJson(){
         setupLayout();
         try {
-            pull();
+            pullUSA();
             pullBoston();
             pullMiami();
             pullLA();
@@ -69,12 +70,13 @@ public class ReadJson {
         textArea1 = new JTextArea("Most Popular Songs in the US:" + "\n");
         textArea2 = new JTextArea("Most Popular Songs in Boston:" + "\n");
         textArea3 = new JTextArea("Most Popular Songs in Miami:" + "\n");
-        textArea4 = new JTextArea("TA4");
+        textArea4 = new JTextArea("Most Popular Songs in LA:" + "\n");
         textArea5 = new JTextArea("TA5");
         textArea6 = new JTextArea("TA6");
         scrollPane1 = new JScrollPane(textArea1);
         scrollPane2 = new JScrollPane(textArea2);
         scrollPane3 = new JScrollPane(textArea3);
+        scrollPane4 = new JScrollPane(textArea4);
 
 
 
@@ -87,7 +89,7 @@ public class ReadJson {
         mainFrame.add(scrollPane1);
         mainFrame.add(scrollPane2);
         mainFrame.add(scrollPane3);
-        mainFrame.add(textArea4);
+        mainFrame.add(scrollPane4);
         mainFrame.add(textArea5);
         mainFrame.add(textArea6);
 
@@ -99,7 +101,7 @@ public class ReadJson {
 
 
 
-    public void pull() throws ParseException {
+    public void pullUSA() throws ParseException {
         String output = "abc";
         String totlaJson="";
 
