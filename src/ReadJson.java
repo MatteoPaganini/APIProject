@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -26,7 +28,7 @@ public class ReadJson {
     private JTextArea textArea3;
     private JTextArea textArea4;
     private JTextArea textArea5;
-    private JTextArea textArea6;
+    private JButton button1;
     private JScrollPane scrollPane1;
     private JScrollPane scrollPane2;
     private JScrollPane scrollPane3;
@@ -72,7 +74,7 @@ public class ReadJson {
         textArea3 = new JTextArea("Most Popular Songs in Miami:" + "\n");
         textArea4 = new JTextArea("Most Popular Songs in LA:" + "\n");
         textArea5 = new JTextArea("TA5");
-        textArea6 = new JTextArea("TA6");
+        button1 = new JButton("Button");
         scrollPane1 = new JScrollPane(textArea1);
         scrollPane2 = new JScrollPane(textArea2);
         scrollPane3 = new JScrollPane(textArea3);
@@ -86,18 +88,38 @@ public class ReadJson {
             }
         });
 
+        button1.setActionCommand("Run");
+        button1.addActionListener(new ButtonClickListener());
+
         mainFrame.add(scrollPane1);
         mainFrame.add(scrollPane2);
         mainFrame.add(scrollPane3);
         mainFrame.add(scrollPane4);
         mainFrame.add(textArea5);
-        mainFrame.add(textArea6);
+        mainFrame.add(button1);
 
         controlPanel = new JPanel();
         controlPanel.setLayout(new BorderLayout(2, 2)); //setting controlPanel as a BorderLayout
 
         mainFrame.setVisible(true);
     }
+
+    private class ButtonClickListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+
+            if (command.equals("Run")) {
+
+                try {
+                    pullChoice();
+                } catch (ParseException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+    }
+
+
 
 
 
@@ -434,7 +456,108 @@ public class ReadJson {
 
     }
 
+    public void pullChoice() throws ParseException {
+        String output = "abc";
+        String totlaJson="";
 
-}
+        try {
+
+            URL url = new URL("https://shazam-api6.p.rapidapi.com/shazam/top_tracks_city?city_name="+textArea5.getText()+"&country_code=US&limit=10");
+            //link curled to Java using curlconverter.com
+            //URL is a unique address that points to a specific resource on the internet (within the server)
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //http is a set of rules that govern how web browsers and servers communicate
+            conn.setRequestMethod("GET"); //httpURLConnection is a specific class that requests information from the URL through the HTTP
+
+            conn.setRequestProperty("x-rapidapi-host", "shazam-api6.p.rapidapi.com");
+            conn.setRequestProperty("x-rapidapi-key", "38668c27cemshdc8714e89254ec4p19d5d2jsn3c04734edc82");
+
+            textArea5.append("\n");
+
+
+            if (conn.getResponseCode() != 200) {
+
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+                totlaJson+=output;
+            }
+
+            conn.disconnect();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONParser parser = new JSONParser();
+        org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) parser.parse(totlaJson);
+        System.out.println(jsonObject);
+
+        try {
+
+            JSONObject result = (JSONObject) jsonObject.get("result"); //getting inside the result Object
+            //System.out.println(result);
+
+            org.json.simple.JSONArray data = (org.json.simple.JSONArray) result.get("data"); //grabs the whole data array
+            //System.out.println(data);
+
+            int n =   data.size(); //(msg).length();
+            for (int i = 0; i < n; ++i) {
+                JSONObject test =(JSONObject) data.get(i);
+                //System.out.println(test);
+                //grabs one of the songs from data array
+                System.out.println(i+1);
+                textArea5.append((String.valueOf(i+1)) + "\n");
+
+                JSONObject attributes = (JSONObject) test.get("attributes");
+                //System.out.println(attributes);
+
+                String name = (String) attributes.get("name");
+                System.out.println(name);
+                textArea5.append(name + "\n");
+                //grabs String from attributes
+
+                String artistName = (String) attributes.get("artistName");
+                System.out.println(artistName);
+                textArea5.append(artistName + "\n" + "\n");
+
+            }
+
+
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+
+        //@Override
+        public void actionPerformed(ActionEvent e) {
+//            if (e.getSource() == cut)
+//                ta.cut();
+//            if (e.getSource() == paste)
+//                ta.paste();
+//            if (e.getSource() == copy)
+//                ta.copy();
+//            if (e.getSource() == selectAll)
+//                ta.selectAll();
+        }
+    }
 
 
